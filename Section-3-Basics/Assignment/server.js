@@ -6,7 +6,7 @@ console.log("Log here")
 
 let i = 0;
 
-const users = ['janne', 'jaakko', 'sari']
+const users = ['alice', 'bob', 'chris']
 
 const server = http.createServer((req, res) => {
     console.log("server received a req")
@@ -24,7 +24,6 @@ const server = http.createServer((req, res) => {
             const parsedBody = Buffer.concat(body).toString()
             const message = parsedBody.split('=')
             console.table(message)
-            
             
             fs.writeFileSync('create-user.txt', message[1]);
 
