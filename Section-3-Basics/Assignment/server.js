@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
             
             fs.writeFileSync('create-user.txt', message[1]);
 
-            users.push(message)
+            users.push(decodeURIComponent(message[1]))
 
             res.statusCode = 302
             res.setHeader('Location', '/users')

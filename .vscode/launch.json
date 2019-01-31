@@ -10,7 +10,8 @@
             "name": "Launch via NODEMON",
             "runtimeExecutable": "nodemon",
             "restart": true,
-            "program": "${workspaceFolder}/Section-3-Basics/Assignment/server.js"
+            "program": "${workspaceFolder}/Section-3-Basics/Assignment/server.js",
+            "console": "externalTerminal"
         },
         {
             "type": "node",
