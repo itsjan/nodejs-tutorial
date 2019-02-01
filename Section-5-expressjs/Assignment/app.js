@@ -16,7 +16,7 @@ app.use('/users', (req, res, next) => {
 
 app.use ('/', (req, res, err) => {
     console.log('Middleware I')
-    res.send('<h1>Middleware II')
+    res.send('<h1>Middleware II</h2>')
 })
 
 
