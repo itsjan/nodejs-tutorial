@@ -19,9 +19,10 @@ app.use('/products', (req, res, next) => {
 app.use('/', (req, res, next) => { 
     console.log("In the Middle II")
     res.write('<h1>HELLO</h1>')
-    res.send()
-    
+    res.send()   
 })
+
+
 
 
 

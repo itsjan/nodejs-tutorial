@@ -7,6 +7,12 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch app.js in current folder",
+            "program": "${workspaceFolder}/Section-5-expressjs/63-parsing-incoming-documents/app.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch via NODEMON",
             "runtimeExecutable": "nodemon",
             "restart": true,
