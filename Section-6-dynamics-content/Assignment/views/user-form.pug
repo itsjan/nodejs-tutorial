@@ -1,0 +1,10 @@
+extends layouts/main-layout.pug
+
+block content
+    .content
+        h1 Add New User
+        form(action="/create-user" method="POST")
+            label(for="user-name") User name:
+            input(type="text" name="username")
+            button(type="submit") Send
+        a(href="/users") See a List of Users ->

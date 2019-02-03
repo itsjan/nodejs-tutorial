@@ -1,0 +1,28 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    background-color: black;
+    color: white;
+
+    width: 80%;
+    margin: auto;
+}
+
+.content {
+    background-color:rgb(20, 20, 41);
+    border-radius: 4px;
+    margin: 1rem;
+    padding: 1rem;
+    min-height: 80vh;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+input,
+button {
+    display: block;
+    font: inherit;
+    max-width: 90%;
+}
