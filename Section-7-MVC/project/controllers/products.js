@@ -22,7 +22,6 @@ exports.getProductsPage = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const newProduct = new Product(req.body.title)
     newProduct.save()
-    //   products.push({ title: req.body.title });
     res.redirect('/');
 }
 
