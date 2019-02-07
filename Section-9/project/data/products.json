@@ -1,1 +1,23 @@
-[{"title":"A Book","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"This is an awesome book!","price":"19"},{"title":"Another Book","imageUrl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"Tämä kirja on koukuttava","price":"10"}]
+[
+    {
+        "title": "A Book",
+        "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
+        "description": "This is an awesome book!",
+        "price": "19",
+        "id": 0.627502488963479
+    },
+    {
+        "title": "Another Book",
+        "imageUrl": "https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg",
+        "description": "Tämä kirja on koukuttava",
+        "price": "10",
+        "id": 0.62750248896348
+    },
+    {
+        "title": "Uusi tuote",
+        "imageUrl": "",
+        "description": "Tällä pitäisi olla id",
+        "price": "11",
+        "id": 0.627502488963481
+    }
+]

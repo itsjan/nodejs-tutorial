@@ -6,9 +6,11 @@
     "configurations": [
         {
             "type": "node",
-            "request": "attach",
-            "name": "Attach",
-            "port": 9229
+            "request": "launch",
+            "name": "Attach Section 9",
+            "runtimeExecutable": "nodemon",
+            "restart": true,
+            "program": "${workspaceFolder}/Section-9/project/app.js"
         },
         {
             "type": "node",
