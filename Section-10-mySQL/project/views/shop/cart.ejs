@@ -1,0 +1,61 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/cart.css">
+
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <%- include('../includes/end.ejs') %>
+
+
+    <main class="centered">
+        <h1>
+            Cart
+        </h1>
+
+        <% if (cart.products.length > 0) { %>
+
+
+        <h2>$<%= cart.totalPrice %></h2>
+
+        <div>
+            <table>
+                <thead>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                </thead>
+                <% cart.products.forEach( function(item) { %>
+                <tr>
+                    <td> <%=item.product.title %> </td>
+                    <td> $<%=item.product.price %></td>
+                    <td>
+                        <%=item.qty %>
+                        <%- include('../includes/add-to-cart.ejs',{product: { id : item.id}}) %>
+                    </td>
+                </tr>
+
+                <% }) %>
+
+            </table>
+        </div>
+
+
+        <%
+        }
+        else
+        {
+            %>
+            <h1> Cart is Empty</h1>
+
+        <%
+        } %>
+
+
+
+
+
+
+
+    </main>
+    <%- include('../includes/end.ejs') %>
