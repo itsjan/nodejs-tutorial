@@ -15,7 +15,7 @@ exports.getProduct = (req, res, next) => {
   // extract path variable productId
   // from params object
   const prodId = req.params.productId
-  
+
   Product.findById(prodId, (product) => {
     res.render('shop/product-detail', {
       product,
@@ -36,19 +36,35 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    path: '/cart',
-    pageTitle: 'Your Cart'
-  });
-};
+
+  Cart.get(cart => {
+    console.table(cart)
+    res.render('shop/cart', {
+      cart,
+      path: '/cart',
+      pageTitle: 'Your Cart'
+    })
+  })
+
+}
 
 exports.postCart = (req, res, next) => {
-  const productId = req.body.productId;
+  const productId = req.body.productId
+  const add = +req.body.qty
+  console.log('Post cart -> ', {productId, add})
+
   Product.findById(productId, (p) => {
-    Cart.addProduct(productId, p.price)
-    res.redirect('/cart')
+    if (add > 0)
+      Cart.addProduct(productId, () =>{
+        res.redirect('/cart')
+      })
+    else
+      Cart.deleteProduct(productId, () =>{
+        res.redirect('/cart')
+      })
+    
   })
-  
+
 }
 
 exports.getOrders = (req, res, next) => {

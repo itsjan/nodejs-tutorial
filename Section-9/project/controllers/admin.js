@@ -14,7 +14,7 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId
   // fetch from the query parameters
   const edit = req.query.edit  // ...?edit=true
-  
+
   if (edit) {
     console.log("EDIT PRODUCT ->", { prodId, edit })
 
@@ -28,8 +28,9 @@ exports.getEditProduct = (req, res, next) => {
   }
   else res.redirect(`/products/${prodId}`)
 
-
 }
+
+
 
 // add or update a product
 exports.postProduct = (req, res, next) => {
@@ -43,10 +44,39 @@ exports.postProduct = (req, res, next) => {
   const description = req.body.description;
 
   new Product(title, imageUrl, description, price, prodId).save()
-  
+
   res.redirect('/admin/products');
 
 };
+
+
+
+// add or update a product
+exports.getDeleteProduct = (req, res, next) => {
+
+
+  // fetch from the url parameters
+  const prodId = req.params.productId
+  // fetch from the url query parameters
+  const confirm = req.query.confirm
+
+  if (confirm) {
+    Product.delete(prodId)
+    res.redirect('/admin/products')
+  }
+  else
+    Product.findById(prodId, product => {
+      res.render('admin/delete-product', {
+        product,
+        pageTitle: 'Delete Product',
+        path: '/admin/delete-product'
+      })
+    })
+
+};
+
+
+
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll(products => {
@@ -57,3 +87,6 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
+
+
+

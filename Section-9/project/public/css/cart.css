@@ -1,0 +1,17 @@
+table, td {
+    border: 1px solid green;
+    margin: auto;
+}
+
+th {
+    border: 1px solid gray;
+    background-color:green;
+    color: white;
+    margin: auto;
+}
+
+td {
+    border: 1px solid gray;
+    background-color: lightgreen;
+    margin: auto;
+}
