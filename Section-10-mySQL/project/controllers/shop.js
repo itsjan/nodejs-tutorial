@@ -20,17 +20,15 @@ exports.getProduct = (req, res, next) => {
   // extract path variable productId
   // from params object
   const prodId = req.params.productId
-
   Product.findById(prodId)
     .then(([products, metadata]) => {
       res.render('shop/product-detail', {
         product: products[0],
-        pageTitle: product.title,
+        pageTitle: products[0].title,
         path: '/products'
       })
     })
     .catch(err => console.table(err))
-
 }
 
 exports.getIndex = (req, res, next) => {

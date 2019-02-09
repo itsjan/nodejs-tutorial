@@ -50,7 +50,7 @@ module.exports = class Product {
   }
 
 
-  static findById(id, cb) {
+  static findById(id) {
     const statement = `SELECT * FROM product WHERE id = ${Number.parseInt(id)}`
     return db.execute(statement)
   }
