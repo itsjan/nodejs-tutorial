@@ -30,8 +30,6 @@ exports.getEditProduct = (req, res, next) => {
 
 }
 
-
-
 // add or update a product
 exports.postProduct = (req, res, next) => {
 
@@ -43,14 +41,15 @@ exports.postProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  new Product(title, imageUrl, description, price, prodId).save(() =>
-    res.redirect('/admin/products'))
+  Product.insertOrUpdate({
+    id: prodId, title: title, imageurl: imageUrl, description: description, price:price
+  }).then(result => {
+    console.log(result)
+    res.redirect('/admin/products')
+  })
+    .catch(err => console.log(err))
+}
 
-};
-
-
-
-// add or update a product
 exports.getDeleteProduct = (req, res, next) => {
 
 
@@ -63,7 +62,7 @@ exports.getDeleteProduct = (req, res, next) => {
     Product.delete(prodId, () => {
       res.redirect('/admin/products')
     })
-    
+
   }
   else
     Product.findById(prodId, product => {

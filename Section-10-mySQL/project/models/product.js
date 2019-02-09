@@ -1,4 +1,34 @@
-const fs = require('fs');
+const Sequelize = require('sequelize')
+
+const sequelize = require('../util/db')
+
+const Product = sequelize.define('product', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  imageurl: {
+    type: Sequelize.STRING
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  price: {
+    type: Sequelize.DECIMAL(10,2),
+    allowNull: false
+  }
+})
+
+module.exports = Product
+
+/* const fs = require('fs');
 const path = require('path');
 
 const Sql = require('sqlstring')
@@ -62,3 +92,4 @@ module.exports = class Product {
 
 
 };
+ */
