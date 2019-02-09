@@ -1,1 +1,1 @@
-{"products":[{"id":"1","qty":2,"product":{"id":1,"title":"Ensimmäinen tuote, eli ykkönen","price":"100.00","description":"Tämä on ensimmäinen esimerkkituote","imageurl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"}}],"totalPrice":200}
+{"products":[{"id":"1","qty":3,"product":{"id":1,"title":"Ensimmäinen tuote, eli ykkönen","price":"100.00","description":"Tämä on ensimmäinen esimerkkituote","imageurl":"https://www.publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg"}}],"totalPrice":300}

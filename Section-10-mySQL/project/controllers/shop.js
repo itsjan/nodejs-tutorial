@@ -39,8 +39,8 @@ exports.getIndex = (req, res, next) => {
         pageTitle: 'Shop',
         path: '/'
       })
-        .catch(err => console.table(err))
     })
+    .catch(err => console.table(err))
 }
 
 exports.getCart = (req, res, next) => {
