@@ -66,24 +66,25 @@ module.exports = class Cart {
                 cart.products[tableIndex] = updatedProduct
 
                 saveCart(cart)
+                cb(cart)
 
 
             }
             else {
                 console.log('Add new item to cart. ID ->', id)
-                Product.findById(id, product => {
-
-                    console.table(product)
-
-                    cart.products.push({
-                        id,
-                        qty: 1
-                        , product
+                Product.findById(id)
+                    .then(([products, metadata]) => {
+                        cart.products.push({
+                            id,
+                            qty: 1, 
+                            product : products[0]
+                        })
+                        saveCart(cart)
+                        cb(cart)
                     })
-                    saveCart(cart)
-                })
+                    .catch(err => console.table(err))
             }
-            cb(cart)
+            
         })
 
     }

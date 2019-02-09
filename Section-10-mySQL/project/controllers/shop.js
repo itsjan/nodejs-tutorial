@@ -2,38 +2,48 @@ const Product = require('../models/product')
 const Cart = require('../models/cart')
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/product-list', {
-      prods: products,
-      pageTitle: 'All Products',
-      path: '/products'
-    });
-  });
-};
+
+  Product.fetchAll()
+    .then(([products, metadata]) => {
+      res.render('shop/product-list', {
+        prods: products,
+        pageTitle: 'All Products',
+        path: '/products'
+      })
+    })
+    .catch(err => console.table(err))
+}
+
+
 
 exports.getProduct = (req, res, next) => {
   // extract path variable productId
   // from params object
   const prodId = req.params.productId
 
-  Product.findById(prodId, (product) => {
-    res.render('shop/product-detail', {
-      product,
-      pageTitle: product.title,
-      path: '/products'
+  Product.findById(prodId)
+    .then(([products, metadata]) => {
+      res.render('shop/product-detail', {
+        product: products[0],
+        pageTitle: product.title,
+        path: '/products'
+      })
     })
-  })
+    .catch(err => console.table(err))
+
 }
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/index', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/'
-    });
-  });
-};
+  Product.fetchAll()
+    .then(([products, metadata]) => {
+      res.render('shop/index', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/'
+      })
+        .catch(err => console.table(err))
+    })
+}
 
 exports.getCart = (req, res, next) => {
 
@@ -51,20 +61,16 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const productId = req.body.productId
   const add = +req.body.qty
-  console.log('Post cart -> ', {productId, add})
+  console.log('Post cart -> ', { productId, add })
 
-  Product.findById(productId, (p) => {
-    if (add > 0)
-      Cart.addProduct(productId, () =>{
-        res.redirect('/cart')
-      })
-    else
-      Cart.deleteProduct(productId, () =>{
-        res.redirect('/cart')
-      })
-    
-  })
-
+  if (add > 0)
+    Cart.addProduct(productId, () => {
+      res.redirect('/cart')
+    })
+  else
+    Cart.deleteProduct(productId, () => {
+      res.redirect('/cart')
+    })
 }
 
 exports.getOrders = (req, res, next) => {

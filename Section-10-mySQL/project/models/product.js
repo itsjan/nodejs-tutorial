@@ -11,13 +11,6 @@ const p = path.join(
   'products.json'
 );
 
-const getProducts = cb => {
-  db.execute('select * from product')
-    .then(data => {
-      cb(data[0])
-    })
-};
-
 module.exports = class Product {
   constructor(title, imageurl, description, price, id) {
     this.title = title
@@ -29,8 +22,8 @@ module.exports = class Product {
   }
 
   save(cb) {
-
     let statement
+
     if (this.id) {
       statement = `UPDATE product 
       SET title = ${Sql.escape(this.title)},
@@ -47,52 +40,25 @@ module.exports = class Product {
           ${Sql.escape(this.description)},
           ${Number.parseFloat(this.price)} )`
     }
-    console.log(statement)
-
-
-    db.execute(statement)
-      .then(resp => 
-        {
-          console.table(resp)
-          cb(resp)})
-      .catch(err => {
-        console.table(err)
-        cb(err)})
+   
+    return db.execute(statement)
   }
 
   static delete(id, cb) {
-
     const statement = `DELETE FROM product WHERE id = ${Number.parseInt(id)}`
-
-    db.execute(statement)
-      .then(resp => {
-        console.table(resp[0])
-        cb(resp)
-      })
-      .catch(err => {
-        console.log(err)
-        cb(err)
-      }
-      )
-
+    return db.execute(statement)
   }
 
 
   static findById(id, cb) {
-    console.log('Find by id ->', id)
-
     const statement = `SELECT * FROM product WHERE id = ${Number.parseInt(id)}`
-
-    db.execute(statement)
-      .then(resp => {
-        console.table(resp[0])
-        cb(resp[0][0])
-      })
-      .catch(err => console.log(err))
-
+    return db.execute(statement)
   }
 
-  static fetchAll(cb) {
-    getProducts(cb)
+
+  static fetchAll() {
+    return db.execute('select * from product')
   }
+
+
 };
