@@ -40,7 +40,7 @@ exports.postProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  Product.insertOrUpdate({
+  Product.upsert({
     id: prodId, title: title, imageurl: imageUrl, description: description, price: price
   }).then(result => {
     console.log(result)
@@ -76,7 +76,7 @@ exports.getDeleteProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll({})
+  Product.findAll()
     .then(products => {
       res.render('admin/products', {
         prods: products,

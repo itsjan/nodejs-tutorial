@@ -7,10 +7,20 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Attach Section 9",
-            "runtimeExecutable": "nodemon",
-            "restart": true,
-            "program": "${workspaceFolder}/Section-9/project/app.js"
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/Section-10-mySQL/project/app.js",
+            "cwd" : "${workspaceFolder}/Section-10-mySQL/project"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch via NPM",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "debug"
+            ],
+            "port": 9229
         },
         {
             "type": "node",
