@@ -9,7 +9,6 @@ exports.getAddProduct = (req, res, next) => {
 }
 
 exports.getEditProduct = (req, res, next) => {
-
   // fetch from the url parameters
   const prodId = req.params.productId
   // fetch from the query parameters
@@ -18,16 +17,16 @@ exports.getEditProduct = (req, res, next) => {
   if (edit) {
     console.log("EDIT PRODUCT ->", { prodId, edit })
 
-    Product.findById(prodId, product => {
-      res.render('admin/edit-product', {
-        product: product,
-        pageTitle: 'Edit Product',
-        path: '/admin/edit-product'
+    Product.findByPk(prodId)
+      .then((product) => {
+        res.render('admin/edit-product', {
+          product: product,
+          pageTitle: 'Edit Product',
+          path: '/admin/edit-product'
+        })
       })
-    })
+      .catch(err => console.table(err))
   }
-  else res.redirect(`/products/${prodId}`)
-
 }
 
 // add or update a product
@@ -42,7 +41,7 @@ exports.postProduct = (req, res, next) => {
   const description = req.body.description;
 
   Product.insertOrUpdate({
-    id: prodId, title: title, imageurl: imageUrl, description: description, price:price
+    id: prodId, title: title, imageurl: imageUrl, description: description, price: price
   }).then(result => {
     console.log(result)
     res.redirect('/admin/products')
@@ -51,42 +50,39 @@ exports.postProduct = (req, res, next) => {
 }
 
 exports.getDeleteProduct = (req, res, next) => {
-
-
   // fetch from the url parameters
   const prodId = req.params.productId
   // fetch from the url query parameters
   const confirm = req.query.confirm
 
   if (confirm) {
-    Product.delete(prodId, () => {
-      res.redirect('/admin/products')
-    })
-
-  }
-  else
-    Product.findById(prodId, product => {
-      res.render('admin/delete-product', {
-        product,
-        pageTitle: 'Delete Product',
-        path: '/admin/delete-product'
+    // User were shown a confirmation dialog ...
+    Product.findByPk(prodId)
+      .then(product => product.destroy())
+      .then(() => {
+        res.redirect('/admin/products')
       })
-    })
-
-};
-
-
-
+  }
+  else {
+    Product.findByPk(prodId)
+      .then((product) => {
+        res.render('admin/delete-product', {
+          product,
+          pageTitle: 'Delete Product',
+          path: '/admin/delete-product'
+        })
+      })
+  }
+}
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('admin/products', {
-      prods: products,
-      pageTitle: 'Admin Products',
-      path: '/admin/products'
-    });
-  });
+  Product.findAll({})
+    .then(products => {
+      res.render('admin/products', {
+        prods: products,
+        pageTitle: 'Admin Products',
+        path: '/admin/products'
+      })
+    }).catch(err => console.table(err))
+
 };
-
-
-
