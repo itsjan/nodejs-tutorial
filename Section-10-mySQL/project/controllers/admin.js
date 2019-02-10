@@ -15,7 +15,6 @@ exports.getEditProduct = (req, res, next) => {
   const edit = req.query.edit  // ...?edit=true
 
   if (edit) {
-    console.log("EDIT PRODUCT ->", { prodId, edit })
 
     Product.findByPk(prodId)
       .then((product) => {
