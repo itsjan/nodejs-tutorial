@@ -73,8 +73,6 @@ exports.getRemoveProductFromCart =  async (req, res, next) => {
 
   res.redirect('/cart')
 
-
-
 }
 
 exports.postCart = (req, res, next) => {
@@ -83,6 +81,10 @@ exports.postCart = (req, res, next) => {
   const qty = Number.parseInt(req.body.qty)
   let userCart
   let newQuantity = qty
+  
+
+  //TODO: Re-implement with await async
+
 
   console.log({ newQuantity })
 
