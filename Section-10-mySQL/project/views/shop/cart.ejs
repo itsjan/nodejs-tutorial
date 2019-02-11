@@ -25,6 +25,8 @@
                     <td> <%= product.cartItem.qty %>
 
                         <%- include('../includes/add-to-cart.ejs',{product: { id : product.id}}) %>
+                        <%- include('../includes/remove-product-from-cart.ejs',{product: { id : product.id}}) %>
+                        
                     </td>
                 </tr>
 

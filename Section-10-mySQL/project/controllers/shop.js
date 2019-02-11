@@ -60,6 +60,22 @@ exports.getCart = (req, res, next) => {
 
 }
 
+exports.getRemoveProductFromCart =  async (req, res, next) => {
+
+  const prodId = req.params.productId
+
+  const cart = await req.user.getCart()
+  const products = await cart.getProducts({ where: { id: prodId } })
+  const product = products[0]
+  
+  const cartItem = await CartItem.findByPk(product.cartItem.id)
+  await cartItem.destroy()
+
+  res.redirect('/cart')
+
+
+
+}
 
 exports.postCart = (req, res, next) => {
 
@@ -100,10 +116,6 @@ exports.postCart = (req, res, next) => {
     })
     .then(() => res.redirect('/cart'))
     .catch(err => console.log(err))
-
-
-
-
 
 }
 

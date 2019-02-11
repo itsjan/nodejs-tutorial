@@ -50,31 +50,32 @@ Product.belongsToMany(Cart, { through: CartItem })
 sequelize
     .sync()
     //.sync({ force: true })
-    .then(result => {
-        return User.findByPk(1)
-    })
-    .then(user => {
-        if (!user)
-            return User.create({ name: 'Jan', email: 'test.com' })
-        return user
-    })
-    .then(user => {
-        console.log('then create cart for user', user)
-        return user.createCart()
-    })
-    .then(cart => {
-        return Product.create({ title: 'Tuote', 
-        price: 199, 
-        description: 'Product description', 
-        imageUrl : 'https://via.placeholder.com/250',
-        userId: cart.userId })
-            .then(product => { return { cart, product } })
+    // .then(result => {
+    //     return User.findByPk(1)
+    // })
+    // .then(user => {
+    //     if (!user)
+    //         return User.create({ name: 'Jan', email: 'test.com' })
+    //     return user
+    // })
+    // .then(user => {
 
-    })
-    .then(result => {
-        console.log('Create cart item...')
-        return CartItem.create({ cartId: result.cart.id, productId: result.product.id, qty: 1 })
-    })
+    //     console.log('then create cart for user', user)
+    //     return user.createCart()
+    // })
+    // .then(cart => {
+    //     return Product.create({ title: 'Tuote', 
+    //     price: 199, 
+    //     description: 'Product description', 
+    //     imageUrl : 'https://via.placeholder.com/250',
+    //     userId: cart.userId })
+    //         .then(product => { return { cart, product } })
+
+    // })
+    // .then(result => {
+    //     console.log('Create cart item...')
+    //     return CartItem.create({ cartId: result.cart.id, productId: result.product.id, qty: 1 })
+    // })
     .then(cartItem => {
         
         console.log("Listening...")
