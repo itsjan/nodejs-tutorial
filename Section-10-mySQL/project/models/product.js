@@ -15,7 +15,7 @@ const Product = sequelize.define('product', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  imageurl: {
+  imageUrl: {
     type: Sequelize.STRING(1000)
   },
   description: {
@@ -27,8 +27,6 @@ const Product = sequelize.define('product', {
     allowNull: false
   }
 })
-
-Product.upsert({ id: 1, title: "Default Product", imageurl:"https://via.placeholder.com/250", price: 10.99, description:"This is a generic product for demonstration purposes"})
 
 
 module.exports = Product

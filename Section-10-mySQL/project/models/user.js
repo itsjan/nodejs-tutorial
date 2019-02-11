@@ -22,7 +22,4 @@ const User = sequelize.define('user', {
   }
 })
 
-User.upsert({ id: 1, name: "Admin", email:"admin-email"})
-
-
 module.exports = User

@@ -1,5 +1,6 @@
 const Product = require('../models/product')
 const Cart = require('../models/cart')
+const CartItem = require('../models/cart-item')
 
 exports.getProducts = (req, res, next) => {
 
@@ -45,30 +46,65 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
 
-  Cart.get(cart => {
-    console.table(cart)
-    res.render('shop/cart', {
-      cart,
-      path: '/cart',
-      pageTitle: 'Your Cart'
+  req.user.getCart()
+    .then(cart => cart.getProducts())
+    .then(products => {
+      console.table(products)
+      res.render('shop/cart', {
+        products,
+        path: '/cart',
+        pageTitle: 'Your Cart'
+      })
     })
-  })
+
 
 }
 
-exports.postCart = (req, res, next) => {
-  const productId = req.body.productId
-  const add = +req.body.qty
-  console.log('Post cart -> ', { productId, add })
 
-  if (add > 0)
-    Cart.addProduct(productId, () => {
-      res.redirect('/cart')
+exports.postCart = (req, res, next) => {
+
+  const productId = req.body.productId
+  const qty = Number.parseInt(req.body.qty)
+  let userCart
+  let newQuantity = qty
+
+  console.log({ newQuantity })
+
+  req.user
+    .getCart()
+    .then(cart => {
+      userCart = cart // store cart
+      return cart.getProducts({ where: { id: productId } })
     })
-  else
-    Cart.deleteProduct(productId, () => {
-      res.redirect('/cart')
+    .then(products => {
+      let product
+      if (products.length > 0) {
+        product = products[0]
+      }
+
+      if (product) {
+        const oldQuantity = product.cartItem.qty
+        newQuantity = oldQuantity + newQuantity
+        return product
+      }
+      console.log(' tuote ei ollut korissa .. haetaan tuote')
+      return Product.findById(productId)
     })
+    .then(product => {
+      if (newQuantity > 0)
+        return userCart.addProduct(product, {
+          through: { qty: newQuantity }
+        })
+
+      return CartItem.findByPk(product.cartItem.id).then(cartItem => cartItem.destroy())
+    })
+    .then(() => res.redirect('/cart'))
+    .catch(err => console.log(err))
+
+
+
+
+
 }
 
 exports.getOrders = (req, res, next) => {

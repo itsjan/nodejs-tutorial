@@ -41,7 +41,7 @@ exports.postProduct = (req, res, next) => {
   const description = req.body.description;
 
 
-  if (!this.id) {
+  if (prodId ==='') {
     req.user.createProduct({ title: title, imageurl: imageUrl, description: description, price: price })
       .then(result => {
         console.log('Used user.createProduct to insert a new product ..')
@@ -51,6 +51,7 @@ exports.postProduct = (req, res, next) => {
   }
 
   else {
+    console.log("PRODUCT ID !== ''")
     Product.upsert({
       id: prodId, title: title, imageurl: imageUrl, description: description, price: price
     }).then(result => {
