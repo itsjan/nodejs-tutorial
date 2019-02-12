@@ -44,33 +44,40 @@ exports.getIndex = (req, res, next) => {
     .catch(err => console.table(err))
 }
 
-exports.getCart = (req, res, next) => {
+exports.getCart = async (req, res, next) => {
 
-  req.user.getCart()
-    .then(cart => cart.getProducts())
-    .then(products => {
-      console.table(products)
-      res.render('shop/cart', {
-        products,
-        path: '/cart',
-        pageTitle: 'Your Cart'
-      })
-    })
+  let cart = await req.user.getCart()
+
+  if (!cart) {
+    cart = await req.user.createCart()
+  }
+  const products = await cart.getProducts()
+
+  res.render('shop/cart', {
+    products,
+    path: '/cart',
+    pageTitle: 'Your Cart'
+  })
 }
 
 exports.getCheckout = async (req, res, next) => {
-  
+
   const cart = await req.user.getCart()
-  const products = await cart.getProducts()
-  const order = await req.user.createOrder()
-  await order.addProducts(products.map(p => {
-    p.orderItem = {
-      qty: p.cartItem.qty
-    }
-    return p
-  }))
-  //TODO: destroy cart..  
-  res.redirect('/order')
+  if (cart) {
+    const products = await cart.getProducts()
+    const order = await req.user.createOrder()
+    await order.addProducts(products.map(p => {
+      p.orderItem = {
+        qty: p.cartItem.qty
+      }
+      return p
+    }))
+    await cart.destroy()
+    // toinen vaihtoehto on poistaa ostoskorin tuotteet:
+    // cart.setProducts(null)
+    // tällöin asiakkaan cart -tietuetta kierrätetään
+  }
+  res.redirect('/orders')
 
 
 }
@@ -90,54 +97,43 @@ exports.getRemoveProductFromCart = async (req, res, next) => {
 
 }
 
-exports.postCart = (req, res, next) => {
+exports.postCart = async (req, res, next) => {
 
   const productId = req.body.productId
   const qty = Number.parseInt(req.body.qty)
-  let userCart
+
   let newQuantity = qty
 
+  const cart = await req.user.getCart()
+  const products = await cart.getProducts()
+  let product
+  if (products.length > 0)
+    product = products[0]
 
-  //TODO: Re-implement with await async
+  if (product) {
+    const oldQuantity = product.cartItem.qty
+    newQuantity = oldQuantity + newQuantity
+  } else {
+    product = await Product.findByPk(productId)
+  }
 
+  if (newQuantity > 0) {
+    await cart.addProduct(product, { through: { qty: newQuantity } })
+  }
+  else {
+    const cartItem = await CartItem.findByPk(product.cartItem.id)
+    await cartItem.destroy()
+  }
 
-  console.log({ newQuantity })
-
-  req.user
-    .getCart()
-    .then(cart => {
-      userCart = cart // store cart
-      return cart.getProducts({ where: { id: productId } })
-    })
-    .then(products => {
-      let product
-      if (products.length > 0) {
-        product = products[0]
-      }
-
-      if (product) {
-        const oldQuantity = product.cartItem.qty
-        newQuantity = oldQuantity + newQuantity
-        return product
-      }
-      console.log(' tuote ei ollut korissa .. haetaan tuote')
-      return Product.findById(productId)
-    })
-    .then(product => {
-      if (newQuantity > 0)
-        return userCart.addProduct(product, {
-          through: { qty: newQuantity }
-        })
-
-      return CartItem.findByPk(product.cartItem.id).then(cartItem => cartItem.destroy())
-    })
-    .then(() => res.redirect('/cart'))
-    .catch(err => console.log(err))
+  res.redirect('/cart')
 
 }
 
-exports.getOrders = (req, res, next) => {
+exports.getOrders = async (req, res, next) => {
+  const orders = await req.user.getOrders({include: ['products']})
+  
   res.render('shop/orders', {
+    orders,
     path: '/orders',
     pageTitle: 'Your Orders'
   });
