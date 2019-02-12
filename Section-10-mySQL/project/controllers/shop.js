@@ -1,5 +1,5 @@
 const Product = require('../models/product')
-const Cart = require('../models/cart')
+//const Cart = require('../models/cart')
 const CartItem = require('../models/cart-item')
 
 exports.getProducts = (req, res, next) => {
@@ -56,18 +56,33 @@ exports.getCart = (req, res, next) => {
         pageTitle: 'Your Cart'
       })
     })
+}
+
+exports.getCheckout = async (req, res, next) => {
+  
+  const cart = await req.user.getCart()
+  const products = await cart.getProducts()
+  const order = await req.user.createOrder()
+  await order.addProducts(products.map(p => {
+    p.orderItem = {
+      qty: p.cartItem.qty
+    }
+    return p
+  }))
+  //TODO: destroy cart..  
+  res.redirect('/order')
 
 
 }
 
-exports.getRemoveProductFromCart =  async (req, res, next) => {
+exports.getRemoveProductFromCart = async (req, res, next) => {
 
   const prodId = req.params.productId
 
   const cart = await req.user.getCart()
   const products = await cart.getProducts({ where: { id: prodId } })
   const product = products[0]
-  
+
   const cartItem = await CartItem.findByPk(product.cartItem.id)
   await cartItem.destroy()
 
@@ -81,7 +96,7 @@ exports.postCart = (req, res, next) => {
   const qty = Number.parseInt(req.body.qty)
   let userCart
   let newQuantity = qty
-  
+
 
   //TODO: Re-implement with await async
 
@@ -128,9 +143,9 @@ exports.getOrders = (req, res, next) => {
   });
 };
 
-exports.getCheckout = (req, res, next) => {
+/* exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {
     path: '/checkout',
     pageTitle: 'Checkout'
   });
-};
+}; */
