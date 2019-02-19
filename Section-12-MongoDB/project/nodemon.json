@@ -1,0 +1,9 @@
+{
+    "env":{
+        "MONGO_USER": "nodejs-shop-user",
+        "MONGO_PASS": "xUdcwIPG6fibGaoP",
+        "MONGO_DB": "nodejs-shop-DEV",
+        "AUTH_CRYPTOKEY": ""
+    }
+}
+
